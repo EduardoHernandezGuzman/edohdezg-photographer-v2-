@@ -2,7 +2,7 @@
 
 Portfolio fotográfico de **Eduardo Hernández Guzmán (EdoHdezG)**: retrato y fotografía de calle en blanco y negro y color.
 
-**En línea**: https://eduardohernandezguzman.github.io/edohdezg-photographer/
+**En línea**: https://eduardohernandezguzman.github.io/edohdezg-photographer-v2-/
 
 ## Secciones
 
