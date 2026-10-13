@@ -1,4 +1,10 @@
 export function initAnimations() {
+  document.documentElement.classList.add("js");
+  revealElements();
+  fadeInImages();
+}
+
+function revealElements() {
   const elements = document.querySelectorAll(".reveal");
 
   if (!("IntersectionObserver" in window)) {
@@ -19,4 +25,19 @@ export function initAnimations() {
   );
 
   elements.forEach((element) => observer.observe(element));
+}
+
+function fadeInImages() {
+  const images = document.querySelectorAll(".project-img");
+
+  images.forEach((image) => {
+    if (image.complete) {
+      image.classList.add("is-loaded");
+      return;
+    }
+
+    const show = () => image.classList.add("is-loaded");
+    image.addEventListener("load", show, { once: true });
+    image.addEventListener("error", show, { once: true });
+  });
 }
