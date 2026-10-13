@@ -1433,11 +1433,19 @@
         </svg>
       </button>
       <figure class="lightbox-figure">
-        <picture>
-          <source class="lightbox-source-avif" type="image/avif" />
-          <source class="lightbox-source-webp" type="image/webp" />
-          <img class="lightbox-img" alt="" />
-        </picture>
+        <div class="lightbox-stage">
+          <picture class="lightbox-frame is-active">
+            <source type="image/avif" />
+            <source type="image/webp" />
+            <img class="lightbox-img" alt="" />
+          </picture>
+          <picture class="lightbox-frame">
+            <source type="image/avif" />
+            <source type="image/webp" />
+            <img class="lightbox-img" alt="" />
+          </picture>
+          <div class="lightbox-spinner" aria-hidden="true"></div>
+        </div>
         <figcaption class="lightbox-caption" aria-live="polite"></figcaption>
       </figure>
       <button type="button" class="lightbox-next" aria-label="Foto siguiente">

@@ -8,48 +8,94 @@ export function initLightbox() {
     return;
   }
 
-  const image = dialog.querySelector(".lightbox-img");
-  const avifSource = dialog.querySelector(".lightbox-source-avif");
-  const webpSource = dialog.querySelector(".lightbox-source-webp");
+  const frames = Array.from(dialog.querySelectorAll(".lightbox-frame"));
   const caption = dialog.querySelector(".lightbox-caption");
   let index = 0;
+  let activeFrame = 0;
   let lastTrigger = null;
+  let requestId = 0;
 
   function imageInfo(trigger) {
     const img = trigger.querySelector("img");
-    const [, name] = img.getAttribute("src").match(/opt\/([a-z0-9]+)-\d+\./);
+    const match = img.getAttribute("src").match(/opt\/([a-z0-9]+)-\d+\./);
+    const name = match ? match[1] : "";
     return { name, width: img.getAttribute("width"), alt: img.alt };
+  }
+
+  function sourcesFor(info) {
+    const base = `./img/opt/${info.name}-${info.width}`;
+    return { avif: `${base}.avif`, webp: `${base}.webp`, jpg: `${base}.jpg` };
   }
 
   function prefetch(position) {
     const info = imageInfo(
       triggers[(position + triggers.length) % triggers.length]
     );
-    new Image().src = `./img/opt/${info.name}-${info.width}.avif`;
+    new Image().src = sourcesFor(info).avif;
   }
 
-  function render() {
-    const info = imageInfo(triggers[index]);
-    avifSource.srcset = `./img/opt/${info.name}-${info.width}.avif`;
-    webpSource.srcset = `./img/opt/${info.name}-${info.width}.webp`;
-    image.src = `./img/opt/${info.name}-${info.width}.jpg`;
-    image.alt = info.alt;
-    caption.textContent = `${index + 1} / ${triggers.length} · ${info.alt}`;
-    prefetch(index + 1);
-    prefetch(index - 1);
+  function show(position) {
+    const id = ++requestId;
+    const info = imageInfo(triggers[position]);
+    const nextFrame = frames[1 - activeFrame];
+    const [avifSource, webpSource] = nextFrame.querySelectorAll("source");
+    const nextImage = nextFrame.querySelector("img");
+    const sources = sourcesFor(info);
+
+    avifSource.srcset = sources.avif;
+    webpSource.srcset = sources.webp;
+    nextImage.src = sources.jpg;
+    nextImage.alt = info.alt;
+    dialog.classList.add("is-loading");
+
+    const commit = () => {
+      if (id !== requestId) {
+        return;
+      }
+
+      frames[activeFrame].classList.remove("is-active");
+      nextFrame.classList.add("is-active");
+      activeFrame = 1 - activeFrame;
+      dialog.classList.remove("is-loading");
+      caption.textContent = `${position + 1} / ${triggers.length} · ${info.alt}`;
+      prefetch(position + 1);
+      prefetch(position - 1);
+    };
+
+    nextImage.decode().then(commit, commit);
   }
 
   function step(delta) {
     index = (index + delta + triggers.length) % triggers.length;
-    render();
+    show(index);
   }
 
   function open(position) {
     index = position;
     lastTrigger = triggers[position];
-    render();
+    show(index);
     dialog.showModal();
     lockScroll();
+  }
+
+  function cleanup() {
+    requestId += 1;
+    unlockScroll();
+    dialog.classList.remove("is-loading");
+    frames.forEach((frame) => {
+      frame.classList.remove("is-active");
+      frame.querySelectorAll("source").forEach((source) => {
+        source.removeAttribute("srcset");
+      });
+      const img = frame.querySelector("img");
+      img.removeAttribute("src");
+      img.alt = "";
+    });
+    activeFrame = 0;
+    if (lastTrigger) {
+      lastTrigger.focus();
+      lastTrigger = null;
+    }
   }
 
   triggers.forEach((trigger, position) => {
@@ -66,20 +112,7 @@ export function initLightbox() {
     .querySelector(".lightbox-next")
     .addEventListener("click", () => step(1));
 
-  function cleanup() {
-    unlockScroll();
-    image.removeAttribute("src");
-    avifSource.removeAttribute("srcset");
-    webpSource.removeAttribute("srcset");
-    if (lastTrigger) {
-      lastTrigger.focus();
-    }
-  }
-
   dialog.addEventListener("close", cleanup);
-  dialog.addEventListener("cancel", () => {
-    setTimeout(cleanup, 0);
-  });
 
   dialog.addEventListener("keydown", (event) => {
     if (event.key === "ArrowLeft") {
@@ -87,6 +120,14 @@ export function initLightbox() {
     }
     if (event.key === "ArrowRight") {
       step(1);
+    }
+    if (event.key === "Home") {
+      index = 0;
+      show(index);
+    }
+    if (event.key === "End") {
+      index = triggers.length - 1;
+      show(index);
     }
   });
 
