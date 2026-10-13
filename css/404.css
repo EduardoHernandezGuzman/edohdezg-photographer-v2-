@@ -1,0 +1,70 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 100vh;
+  min-height: 100svh;
+  margin: 0;
+  padding: 2rem;
+  color: #ffffff;
+  font-family: "Merriweather", "Merriweather Fallback", serif;
+  text-align: center;
+  background: #333333;
+}
+
+.code {
+  margin: 0;
+  color: #e3b341;
+  font-family: "Bebas Neue", "Bebas Neue Fallback", sans-serif;
+  font-size: clamp(6rem, 24vw, 12rem);
+  line-height: 1;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(1.4rem, 1vw + 1.1rem, 1.8rem);
+  font-weight: 500;
+  text-wrap: balance;
+}
+
+.message {
+  max-width: 42ch;
+  margin: 0;
+  color: #bbbbbb;
+  font-size: 1.1rem;
+  text-wrap: pretty;
+}
+
+.home-link {
+  margin-top: 1rem;
+  padding: 0.6rem 1.4rem;
+  color: #ffffff;
+  text-decoration: none;
+  border: 1px solid #ffffff;
+  border-radius: 999px;
+  transition:
+    color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.home-link:hover,
+.home-link:focus-visible {
+  color: #333333;
+  background-color: #e3b341;
+  border-color: #e3b341;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-link {
+    transition: none;
+  }
+}

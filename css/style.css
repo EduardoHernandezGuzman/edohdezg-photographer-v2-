@@ -762,22 +762,56 @@ body.no-scroll {
 
 .about-link a,
 .contact-link a,
-.contact-social a {
+.contact-social a,
+.copy-email {
   padding: 0.5rem 1rem;
   color: var(--color-text);
+  font-family: inherit;
   font-size: 1.2rem;
   text-decoration: none;
   border: 1px solid var(--color-text);
+  border-radius: var(--radius-pill);
   transition:
-    background-color var(--transition-fast),
-    color var(--transition-fast);
+    background-color var(--transition-fast) var(--ease-out),
+    color var(--transition-fast) var(--ease-out);
 }
 
 .about-link a:hover,
 .contact-link a:hover,
-.contact-social a:hover {
+.contact-social a:hover,
+.copy-email:hover {
   background-color: var(--color-text);
   color: var(--color-light);
+}
+
+.contact-link {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.copy-email {
+  cursor: pointer;
+}
+
+.copy-status {
+  margin: 0;
+  color: var(--color-accent-strong);
+  font-size: 0.95rem;
+}
+
+.copy-status:empty {
+  display: none;
+}
+
+.contact-social a::after,
+.site-footer-links a::after {
+  content: "↗" / "";
+  display: inline-block;
+  margin-left: 0.35em;
+  font-size: 0.85em;
+  line-height: 1;
 }
 
 .contact-social {
@@ -918,6 +952,7 @@ body.no-scroll {
   color: var(--color-light);
   text-align: center;
   background: var(--color-text);
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
 }
 
 .site-footer-brand {
@@ -942,7 +977,7 @@ body.no-scroll {
 }
 
 .site-footer-links a:hover {
-  color: var(--color-muted);
+  color: var(--color-accent);
 }
 
 .site-footer-copy {

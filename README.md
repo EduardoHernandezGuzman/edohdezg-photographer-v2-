@@ -14,9 +14,10 @@ Portfolio fotográfico de **Eduardo Hernández Guzmán (EdoHdezG)**: retrato y f
 
 HTML5, CSS3 y JavaScript vanilla (módulos ES). Sin frameworks en runtime:
 
-- Fuentes auto-hospedadas (Oswald, Merriweather y Bebas Neue).
+- Fuentes auto-hospedadas (Oswald, Merriweather y Bebas Neue) con caras de respaldo medidas (`size-adjust`).
 - Imágenes en AVIF con fallback WebP/JPG y `srcset`, generadas con sharp.
-- Scroll reveal con IntersectionObserver y visor con `<dialog>` nativo.
+- Scroll reveal con IntersectionObserver y visor con `<dialog>` nativo (crossfade con `decode()` y spinner).
+- Acento ámbar accesible (AA sobre fondos claros y oscuros) y escala tipográfica fluida con `clamp()`.
 
 ## Estructura
 
@@ -25,18 +26,20 @@ HTML5, CSS3 y JavaScript vanilla (módulos ES). Sin frameworks en runtime:
 ├── 404.html                # página 404 (GitHub Pages)
 ├── css/
 │   ├── style.css           # estilos del sitio (tokens, layout, componentes)
-│   ├── fonts.css           # declaraciones @font-face
+│   ├── fonts.css           # declaraciones @font-face y caras de respaldo
+│   ├── 404.css             # estilos de la página 404
 │   └── no-js.css           # fallback sin JavaScript
 ├── js/                     # módulos ES
 │   ├── main.js             # punto de entrada
-│   ├── animations.js       # scroll reveal (IntersectionObserver)
-│   ├── contact.js          # hidratación del email
+│   ├── animations.js       # scroll reveal y fade-in de imágenes
+│   ├── contact.js          # email y botón de copiar
 │   ├── footer.js           # año dinámico
 │   ├── lightbox.js         # visor de fotos
 │   ├── menu.js             # menú overlay accesible
-│   └── navigation.js       # topbar, scrollspy y volver arriba
+│   ├── navigation.js       # topbar, scrollspy y volver arriba
+│   └── utils.js            # bloqueo de scroll compartido
 ├── fonts/                  # woff2 auto-hospedadas y sus licencias
-├── img/                    # originales (fuente)
+├── img/                    # originales (fuente) e iconos
 │   └── opt/                # derivados AVIF/WebP/JPG generados con sharp
 └── scripts/
     ├── optimize-images.mjs # pipeline de imágenes
@@ -62,9 +65,9 @@ La primera vez hay que activarlo en **Settings → Pages → Source: GitHub Acti
 
 ## Calidad
 
-- **Accesibilidad**: 100 en Lighthouse (alt descriptivos, foco visible, menú y visor operables por teclado, soporte de `prefers-reduced-motion`).
-- **Rendimiento**: ~250 KB de carga inicial y menos de 1 MB con la página completa (19 imágenes AVIF desde 21 MB de originales).
-- **Seguridad**: CSP restrictiva y sin dependencias externas en runtime.
+- **Accesibilidad**: 100 en Lighthouse (alt descriptivos, foco visible, skip link, menú y visor operables por teclado, soporte de `prefers-reduced-motion` y `prefers-contrast`).
+- **Rendimiento**: ~250 KB de carga inicial y menos de 1 MB con la página completa (19 imágenes AVIF desde 21 MB de originales), con preload de fuentes e imágenes y métricas de respaldo.
+- **Seguridad**: CSP restrictiva (también en la 404) y sin dependencias externas en runtime.
 
 ## Historial de mejoras
 
@@ -75,6 +78,7 @@ La primera vez hay que activarlo en **Settings → Pages → Source: GitHub Acti
 5. **Rendimiento**: pipeline con sharp, AVIF/WebP + `srcset` y lazy loading.
 6. **UX**: lightbox nativo, topbar con scrollspy, hero fluido y footer.
 7. **SEO y despliegue**: metadatos, Open Graph, JSON-LD y GitHub Pages.
+8. **v2.0 (rediseño)**: acento ámbar, tipografía fluida, hero `svh` con gradiente, skip link, índice de galerías, lightbox con crossfade, copiar email y 404 a juego.
 
 ## Licencia
 
