@@ -1,12 +1,19 @@
+import { lockScroll, unlockScroll } from "./utils.js";
+
 export function initMenu() {
   const overlay = document.querySelector(".overlay");
   const toggles = Array.from(document.querySelectorAll(".menu-toggle"));
+
+  if (!overlay || toggles.length === 0) {
+    return;
+  }
+
   let activeToggle = null;
 
   function openMenu(trigger) {
     activeToggle = trigger;
     overlay.classList.add("visible");
-    document.body.classList.add("no-scroll");
+    lockScroll();
     toggles.forEach((toggle) => toggle.setAttribute("aria-expanded", "true"));
     const firstFocusable = overlay.querySelector(
       "a[href], button:not([disabled])"
@@ -18,7 +25,7 @@ export function initMenu() {
 
   function closeMenu() {
     overlay.classList.remove("visible");
-    document.body.classList.remove("no-scroll");
+    unlockScroll();
     toggles.forEach((toggle) => toggle.setAttribute("aria-expanded", "false"));
     if (activeToggle) {
       activeToggle.focus();
@@ -65,5 +72,11 @@ export function initMenu() {
 
   overlay.querySelectorAll(".close-btn, .menu a").forEach((element) => {
     element.addEventListener("click", closeMenu);
+  });
+
+  overlay.addEventListener("click", (event) => {
+    if (event.target === overlay) {
+      closeMenu();
+    }
   });
 }

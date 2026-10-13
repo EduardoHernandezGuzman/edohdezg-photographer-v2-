@@ -35,6 +35,7 @@ html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
   scroll-padding-top: 4.5rem;
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -77,7 +78,31 @@ picture {
 }
 
 body.no-scroll {
+  position: fixed;
+  inset-inline: 0;
+  width: 100%;
   overflow: hidden;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 40;
+  padding: 0.6rem 1.1rem;
+  color: var(--color-text);
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  background: var(--color-accent);
+  border-radius: var(--radius-pill);
+  transform: translateY(-250%);
+  transition: transform var(--transition-fast) var(--ease-out);
+}
+
+.skip-link:focus {
+  transform: none;
 }
 
 :focus-visible {
@@ -171,13 +196,15 @@ body.no-scroll {
   align-items: center;
   width: 100%;
   height: 100vh;
+  height: 100svh;
   background: var(--color-text);
 }
 
 .menu-toggle {
   position: absolute;
-  top: 2rem;
-  right: 6rem;
+  z-index: 1;
+  top: max(2rem, calc(1rem + env(safe-area-inset-top, 0px)));
+  right: max(6rem, calc(1rem + env(safe-area-inset-right, 0px)));
   padding: 0;
   color: var(--color-light);
   background: none;
@@ -194,8 +221,9 @@ body.no-scroll {
 
 .media {
   position: absolute;
-  bottom: -1rem;
-  left: 5rem;
+  z-index: 1;
+  bottom: calc(-1rem + env(safe-area-inset-bottom, 0px));
+  left: max(5rem, calc(1rem + env(safe-area-inset-left, 0px)));
 }
 
 .media ul {
@@ -210,6 +238,11 @@ body.no-scroll {
 
 .media ul li a {
   color: var(--color-light);
+  transition: color var(--transition-fast) var(--ease-out);
+}
+
+.media ul li a:hover {
+  color: var(--color-accent);
 }
 
 .media ul li a .icon {
@@ -220,8 +253,9 @@ body.no-scroll {
 
 .view-photos {
   position: absolute;
-  bottom: 2rem;
-  right: 6rem;
+  z-index: 1;
+  bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
+  right: max(6rem, calc(1rem + env(safe-area-inset-right, 0px)));
   display: block;
   font-size: 1.5rem;
   color: var(--color-light);
@@ -235,13 +269,23 @@ body.no-scroll {
 }
 
 .view-photos a:hover {
-  color: var(--color-muted);
+  color: var(--color-accent);
 }
 
 .hero-img {
+  position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
+}
+
+.hero-shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to top, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0) 42%),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0) 28%);
 }
 
 .hero-img img {
@@ -252,6 +296,7 @@ body.no-scroll {
 
 .hero-title {
   position: absolute;
+  z-index: 1;
   top: 65%;
   left: 50%;
   display: block;
@@ -281,18 +326,20 @@ body.no-scroll {
   width: 100%;
   height: 3.5rem;
   padding-inline: 1.5rem;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(10px);
   visibility: hidden;
   transform: translateY(-100%);
   transition:
-    transform var(--transition-fast) ease,
+    transform var(--transition-fast) var(--ease-out),
     visibility 0s linear var(--transition-fast);
 }
 
 .topbar.is-visible {
   visibility: visible;
   transform: none;
-  transition: transform var(--transition-fast) ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  transition: transform var(--transition-fast) var(--ease-out);
 }
 
 .topbar-brand {
@@ -315,15 +362,17 @@ body.no-scroll {
   color: var(--color-light);
   font-size: 0.95rem;
   text-decoration: none;
-  transition: color var(--transition-fast);
+  transition: color var(--transition-fast) var(--ease-out);
 }
 
 .topbar-nav a:hover {
-  color: var(--color-muted);
+  color: var(--color-accent);
 }
 
 .topbar-nav a.is-active {
+  color: var(--color-accent);
   text-decoration: underline;
+  text-decoration-thickness: 2px;
   text-underline-offset: 0.35rem;
 }
 
@@ -340,8 +389,8 @@ body.no-scroll {
 
 .back-to-top {
   position: fixed;
-  right: 1.5rem;
-  bottom: 1.5rem;
+  right: max(1.5rem, calc(1rem + env(safe-area-inset-right, 0px)));
+  bottom: max(1.5rem, calc(1rem + env(safe-area-inset-bottom, 0px)));
   z-index: 15;
   display: grid;
   place-items: center;
@@ -365,7 +414,11 @@ body.no-scroll {
   visibility: visible;
   opacity: 1;
   pointer-events: auto;
-  transition: opacity var(--transition-fast) ease;
+  transition: opacity var(--transition-fast) var(--ease-out);
+}
+
+.back-to-top:hover {
+  color: var(--color-accent);
 }
 
 .back-to-top .icon {
@@ -387,6 +440,7 @@ body.no-scroll {
   width: 100%;
   height: 100%;
   background: var(--color-overlay);
+  overscroll-behavior: contain;
   visibility: hidden;
   opacity: 0;
   transition:
@@ -410,23 +464,45 @@ body.no-scroll {
 
 .menu ul li {
   margin-bottom: 2rem;
+  opacity: 0;
+  transform: translateY(0.75rem);
+  transition:
+    opacity var(--transition-fast) var(--ease-out),
+    transform var(--transition-fast) var(--ease-out);
+}
+
+.overlay.visible .menu ul li {
+  opacity: 1;
+  transform: none;
+}
+
+.overlay.visible .menu ul li:nth-child(2) {
+  transition-delay: 0.06s;
+}
+
+.overlay.visible .menu ul li:nth-child(3) {
+  transition-delay: 0.12s;
+}
+
+.overlay.visible .menu ul li:nth-child(4) {
+  transition-delay: 0.18s;
 }
 
 .menu ul li a {
   color: var(--color-light);
   font-size: 2rem;
   text-decoration: none;
-  transition: color var(--transition-fast);
+  transition: color var(--transition-fast) var(--ease-out);
 }
 
 .menu ul li a:hover {
-  color: var(--color-muted);
+  color: var(--color-accent);
 }
 
 .close-btn {
   position: absolute;
-  top: 2rem;
-  right: 2rem;
+  top: max(2rem, calc(1rem + env(safe-area-inset-top, 0px)));
+  right: max(2rem, calc(1rem + env(safe-area-inset-right, 0px)));
   padding: 0;
   color: var(--color-light);
   background: none;
@@ -723,12 +799,12 @@ body.no-scroll {
 @media (max-width: 767px) {
   .menu-toggle {
     left: auto;
-    right: 10px;
+    right: max(0.625rem, env(safe-area-inset-right, 0px));
   }
 
   .view-photos {
-    right: 1rem;
-    bottom: 1.5rem;
+    right: max(1rem, env(safe-area-inset-right, 0px));
+    bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
     font-size: 1.25rem;
   }
 

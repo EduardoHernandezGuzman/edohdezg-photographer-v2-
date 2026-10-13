@@ -1,3 +1,5 @@
+import { lockScroll, unlockScroll } from "./utils.js";
+
 export function initLightbox() {
   const dialog = document.querySelector(".lightbox");
   const triggers = Array.from(document.querySelectorAll(".lightbox-trigger"));
@@ -47,7 +49,7 @@ export function initLightbox() {
     lastTrigger = triggers[position];
     render();
     dialog.showModal();
-    document.body.classList.add("no-scroll");
+    lockScroll();
   }
 
   triggers.forEach((trigger, position) => {
@@ -65,7 +67,7 @@ export function initLightbox() {
     .addEventListener("click", () => step(1));
 
   function cleanup() {
-    document.body.classList.remove("no-scroll");
+    unlockScroll();
     image.removeAttribute("src");
     avifSource.removeAttribute("srcset");
     webpSource.removeAttribute("srcset");

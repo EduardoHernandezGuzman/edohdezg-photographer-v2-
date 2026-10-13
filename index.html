@@ -85,6 +85,20 @@
     </script>
     <link
       rel="preload"
+      as="font"
+      type="font/woff2"
+      href="./fonts/bebas-neue-latin-400.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="./fonts/merriweather-latin-var.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
       as="image"
       type="image/avif"
       href="./img/opt/p009-1200.avif"
@@ -99,6 +113,7 @@
   </head>
 
   <body>
+    <a class="skip-link" href="#main-content">Saltar al contenido</a>
     <div class="topbar">
       <a class="topbar-brand" href="#home">EdoHdezG</a>
       <nav class="topbar-nav" aria-label="Secciones">
@@ -260,6 +275,7 @@
               height="1040"
             />
           </picture>
+          <div class="hero-shade" aria-hidden="true"></div>
         </div>
 
         <!-- HERO-TITLE -->
@@ -306,7 +322,7 @@
         </div>
       </header>
 
-      <main>
+      <main id="main-content">
         <section class="about-section" id="about">
           <div class="container">
             <div class="row">
