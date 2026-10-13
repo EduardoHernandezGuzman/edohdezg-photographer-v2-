@@ -29,3 +29,30 @@
   font-display: swap;
   src: url("../fonts/bebas-neue-latin-400.woff2") format("woff2");
 }
+
+@font-face {
+  font-family: "Merriweather Fallback";
+  src: local("Georgia");
+  size-adjust: 115.29%;
+  ascent-override: 85.36%;
+  descent-override: 23.68%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Oswald Fallback";
+  src: local("Arial");
+  size-adjust: 111.46%;
+  ascent-override: 107.03%;
+  descent-override: 25.93%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Bebas Neue Fallback";
+  src: local("Arial");
+  size-adjust: 97.73%;
+  ascent-override: 92.09%;
+  descent-override: 30.7%;
+  line-gap-override: 0%;
+}
